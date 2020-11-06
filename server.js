@@ -1,7 +1,8 @@
 const sqlite3 = require('sqlite3').verbose();
 //importa os módulos para utilizar o sqlite no NodeJs
 
-let sql = `SELECT nom_estab FROM ubs WHERE dsc_cidade LIKE "BREJINHO";`;
+let sql = `SELECT nom_estab FROM ubs WHERE dsc_cidade LIKE "NATAL";`;
+let row;
 
 let db = new sqlite3.Database('./ubs.db', (err) => {
   if (err) {
@@ -10,15 +11,14 @@ let db = new sqlite3.Database('./ubs.db', (err) => {
   console.log('Connected to the SQlite database.');
 });
 
-db.all(sql, [], (err, rows)=>{
+db.all(sql, [], (err, row)=>{
   if(err){
     throw err;
   }
-  rows.forEach((row)=>{
-    console.log(row.name);
+  row.forEach((row)=>{
+    console.log(row.nom_estab);
   });
 });
-
 
 
 db.close((err) => {
