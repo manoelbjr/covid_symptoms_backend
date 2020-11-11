@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 let db = new sqlite3.Database('./ubs.db');
 
+//consulta de teste
 let sql = `INSERT INTO sintomaticos(nome,endereco,bairro,cidade) VALUES ('Mílton Belmonte', 'rua dos bobos', 'NUMERO ZERO', 'Springfield');`; 
 
 db.run(`INSERT INTO sintomaticos(nome,endereco,bairro,cidade) VALUES (?,?,?,?)`, 
