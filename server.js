@@ -27,7 +27,7 @@ app.get("/api/ubscidade/:cidade", function (req, res, next) {
 });
 
 //Insere paciente suspeito na tabela para consulta pelos orgãos de saúde
-//  FALA ARRUMAR - NÃO FUNCIONA, TA DANDO ERRO
+//  FALTA ARRUMAR - NÃO FUNCIONA, TA DANDO ERRO
 app.post("/api/sintomatico/", function(req, res){
   
   let dados = {
@@ -48,6 +48,24 @@ app.post("/api/sintomatico/", function(req, res){
   //       return;
   //     }
   // });
+});
+let row;
+app.get("/api/sintomatico", function(req, res){
+  let sql3 = `SELECT * FROM sintomaticos;`;
+  console.log(sql3);
+
+  db.all(sql3, [], function(err,row){
+
+    row.forEach((row)=>{
+      console.log(row);
+    });
+
+    res.json({
+      "message": "success",
+      "data": row
+    });
+
+  });
 });
 
 app.use(function(req, res){
