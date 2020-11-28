@@ -12,7 +12,10 @@ app.listen(HTTP_PORT, () => {
 
 //Consulta todos os estabelecimentos de saúde da cidade informada
 app.get("/api/ubscidade/:cidade", function (req, res, next) {
-  let sql = `SELECT nom_estab FROM ubs WHERE dsc_cidade LIKE '${req.params.cidade}';`;
+  //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5501'');
+  res.set({'Access-Controle-Allow-Origin':'*', "Access-Control-Allow-Origin" : "*", 
+  "Access-Control-Allow-Credentials" : true });
+  let sql = `SELECT nom_estab, dsc_endereco, dsc_bairro FROM ubs WHERE dsc_cidade LIKE '${req.params.cidade}';`;
   console.log(sql);
   let params = [req.params.id];
 
@@ -20,10 +23,7 @@ app.get("/api/ubscidade/:cidade", function (req, res, next) {
       if(err){
         res.status(400).json({"error":err.message});
       }
-      res.json({
-        "message": "success",
-        "data": rows
-      })
+      res.json({rows})
     });
 });
 
@@ -58,8 +58,8 @@ app.post("/api/sintomatico/", function(req, res){
   });
 });
 
+// Recupera lista de pacientes suspeitos detectados pela triagem
 let row;
-
 app.get("/api/sintomatico", function(req, res){
   let sql3 = `SELECT * FROM sintomatico;`;
   //console.log(sql3);
@@ -71,8 +71,10 @@ app.get("/api/sintomatico", function(req, res){
   });
 });
 
+// Recupera informaçõs de nome, cidade e estado da última pessoa do banco de dados
+app.use(cors());
 app.get("/api/sintomatico/getlast", function(req,res){
-  let query = `SELECT nome,cidade, uf FROM ( select * from sintomatico ORDER BY ID desc limit 1) ORDER BY id;`;
+  let query = `SELECT nome, cidade, uf FROM ( select * from sintomatico ORDER BY ID desc limit 1) ORDER BY id;`;
   let output;
 
   db.all(query, [], function(err, output){
@@ -81,6 +83,20 @@ app.get("/api/sintomatico/getlast", function(req,res){
     }
 
     res.json(output);
+    console.log(query);
+  });
+
+});
+
+app.get("/api/sintomatico/getlast/cidade", function(req,res){
+  let query = `SELECT cidade FROM ( select * from sintomatico ORDER BY ID desc limit 1) ORDER BY id;`;
+  let output;
+
+  db.all(query, [], function(err, output){
+    if(err){
+      output.status(400).json({"error":err.message});
+    }
+    res.send(output);
     console.log(query);
   });
 
