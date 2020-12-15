@@ -4,7 +4,7 @@ let bodyParser = require('body-parser');
 const cors = require('cors');
 let db = require("./database.js");
 
-let HTTP_PORT = process.env.PORT;
+let HTTP_PORT = process.env.PORT || 3000;
 
 app.listen(HTTP_PORT, () => {
   console.log(`Servidor executando em https://localhost:%PORT`.replace(`%PORT`,HTTP_PORT))
